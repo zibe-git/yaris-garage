@@ -1,0 +1,58 @@
+name: Test and deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      # The CCSA model (42 MB zip, SHA-384 checked) is downloaded at build time, never committed
+      - uses: actions/cache@v4
+        with:
+          path: data/raw
+          key: ccsa-yaris-${{ hashFiles('tools/model/fetch-data.mjs') }}
+      - run: npm run model
+      - run: npx playwright install --with-deps chromium
+      # build + Lighthouse 100 on the launcher + every app opens without layout shift or console noise
+      # (software WebGL on the runner, so tap latency is only checked on a real GPU)
+      - run: npm test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-output
+          path: tests/output
+      - if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v5
+      - if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

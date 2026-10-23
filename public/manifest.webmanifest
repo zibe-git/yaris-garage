@@ -1,0 +1,11 @@
+{
+  "name": "Yaris Garage",
+  "short_name": "Yaris",
+  "description": "Explode, drive, rally and rebuild the 2010 Toyota Yaris crash-test model.",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0e1013",
+  "theme_color": "#0e1013",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

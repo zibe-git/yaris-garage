@@ -1,0 +1,69 @@
+/* Shared app chrome: phone-first, 44 px touch targets, safe-area aware. Loaded only when an app opens. */
+.shell { position: absolute; inset: 0; overflow: hidden; user-select: none; -webkit-user-select: none; }
+.view { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+.hud { position: absolute; inset: 0; pointer-events: none; }
+.hud > * { pointer-events: auto; }
+
+.bar { position: absolute; left: 0; right: 0; top: 0; display: flex; align-items: center; gap: 6px; padding: calc(6px + var(--safe-t)) 8px 6px; background: linear-gradient(#0e1013d9, #0e101300); pointer-events: none; }
+.bar > * { pointer-events: auto; }
+.bar h1 { flex: 1; font-size: 17px; margin: 0; text-shadow: 0 1px 3px #000a; pointer-events: none; }
+.bar-actions { display: flex; gap: 6px; }
+
+.icon-btn, .btn { appearance: none; border: 1px solid #ffffff1f; background: #161a20cc; color: var(--text); font: inherit; font-size: 15px; min-width: 44px; height: 44px; padding: 0 12px; border-radius: 12px; display: inline-grid; place-items: center; text-decoration: none; cursor: pointer; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.icon-btn.back { font-size: 28px; line-height: 1; padding: 0 0 3px; }
+.icon-btn[aria-pressed="true"], .btn.on { background: var(--accent); color: #1a1205; border-color: transparent; }
+.btn.primary { background: var(--accent); color: #1a1205; border: 0; font-weight: 600; }
+.icon-btn:focus-visible, .btn:focus-visible, .chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.icon-btn:active, .btn:active { transform: scale(.96); }
+
+.loading { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(70vw, 280px); text-align: center; color: var(--muted); font-size: 14px; }
+.loading[hidden] { display: none; }
+.progress { height: 4px; border-radius: 2px; background: #ffffff1a; overflow: hidden; margin-bottom: 10px; }
+.progress i { display: block; height: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .2s; }
+
+.toast { position: absolute; left: 50%; top: calc(64px + var(--safe-t)); transform: translate(-50%, -8px); background: #000c; color: #fff; padding: 8px 14px; border-radius: 20px; font-size: 14px; opacity: 0; transition: opacity .2s, transform .2s; pointer-events: none; white-space: nowrap; max-width: calc(100vw - 32px); overflow: hidden; text-overflow: ellipsis; }
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+/* bottom panel: scrollable chip row, slider, sheets */
+.dock { position: absolute; left: 0; right: 0; bottom: 0; padding: 8px 8px calc(8px + var(--safe-b)); display: grid; gap: 8px; background: linear-gradient(#0e101300, #0e1013e6 40%); }
+.row { display: flex; gap: 8px; align-items: center; }
+.chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 2px; scroll-snap-type: x proximity; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex: none; appearance: none; height: 36px; padding: 0 12px; border-radius: 18px; border: 1px solid #ffffff22; background: #161a20cc; color: var(--text); font: inherit; font-size: 13.5px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; scroll-snap-align: start; }
+.chip i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.chip.off { opacity: .45; }
+.chip.solo { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.range { flex: 1; height: 44px; accent-color: var(--accent); }
+.label { color: var(--muted); font-size: 13px; min-width: 56px; }
+
+.sheet { position: absolute; left: 8px; right: 8px; bottom: calc(8px + var(--safe-b)); max-width: 520px; margin: 0 auto; background: #15191fee; border: 1px solid #ffffff1a; border-radius: 18px; padding: 14px 16px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transform: translateY(0); transition: transform .25s, opacity .25s; }
+.sheet[hidden] { display: block; transform: translateY(120%); opacity: 0; pointer-events: none; }
+.sheet h2 { margin: 0 0 4px; font-size: 18px; }
+.sheet .sub { color: var(--muted); font-size: 13.5px; margin: 0 0 10px; }
+.sheet dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 0 0 12px; font-size: 14px; }
+.sheet dt { color: var(--muted); }
+.sheet dd { margin: 0; }
+
+.menu { position: absolute; inset: 0; overflow-y: auto; padding: calc(64px + var(--safe-t)) 16px calc(24px + var(--safe-b)); background: #0e1013f2; }
+.menu[hidden] { display: none; }
+.menu h2 { font-size: 15px; color: var(--muted); font-weight: 600; margin: 18px 0 8px; text-transform: uppercase; letter-spacing: .06em; }
+.menu .levels { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.menu .level { appearance: none; text-align: left; border: 1px solid #ffffff1a; background: var(--card); color: var(--text); border-radius: 14px; padding: 12px; font: inherit; min-height: 74px; cursor: pointer; }
+.menu .level b { display: block; font-size: 15px; }
+.menu .level span { color: var(--muted); font-size: 12.5px; }
+.menu .level.done { border-color: #5a9e5a; }
+
+/* driving HUD */
+.speedo { position: absolute; right: 12px; top: calc(60px + var(--safe-t)); text-align: right; font-variant-numeric: tabular-nums; text-shadow: 0 1px 4px #000c; }
+.speedo b { font-size: 34px; line-height: 1; }
+.speedo small { display: block; color: #ffffffb3; font-size: 12px; }
+.pedals { position: absolute; bottom: calc(14px + var(--safe-b)); display: flex; gap: 10px; }
+.pedals.left { left: 12px; }
+.pedals.right { right: 12px; }
+.pad { appearance: none; width: 74px; height: 74px; border-radius: 50%; border: 1px solid #ffffff2a; background: #10131899; color: #fff; font: inherit; font-size: 13px; touch-action: none; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.pad.on { background: #ff9d2ecc; color: #1a1205; }
+
+/* Explode: in a short landscape view the chips and the slider share one row */
+@media (orientation: landscape) and (max-height: 520px) {
+  .app-explode .dock { grid-template-columns: minmax(0, 1fr) minmax(200px, 34%); align-items: center; }
+}

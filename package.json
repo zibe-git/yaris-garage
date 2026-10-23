@@ -1,0 +1,29 @@
+{
+  "name": "yaris-garage",
+  "version": "0.1.0",
+  "description": "Yaris Explode, Drive, Rally and Puzzle for phones in one page: raw WebGL2, no 3D library",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4175 --strictPort",
+    "model": "node tools/model/fetch-data.mjs detailed && node tools/model/convert-k.mjs data/extracted/detailed/2010-toyota-yaris-detailed-v2j/yaris-detailed-v2j.key data/model && node tools/bake.mjs data/model public/model",
+    "bake": "node tools/bake.mjs data/model public/model",
+    "test": "vite build && node tests/vitals.mjs",
+    "shot": "node tools/shot.mjs"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "lighthouse": "12.2.1",
+    "meshoptimizer": "0.22.0",
+    "playwright": "1.49.1",
+    "vite": "6.0.7"
+  },
+  "allowScripts": {
+    "esbuild@0.24.2": true
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
